@@ -1,0 +1,132 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>全国各省妇幼保健院数</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+        /* 页眉的基本样式 */
+        header {
+      background-color: rgba(0, 0, 0, 0.1);
+      background-repeat: no-repeat;
+      background-size: cover;
+      color: black;
+      padding: 0;
+      height:60px;
+      background-position: center;
+     }
+
+    header h1 {
+
+      font-family: '黑体', sans-serif; 
+      text-align: left;
+      height: 60px;
+     }
+
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.29/"></script>
+
+    <script>
+      require(["esri/Map", "esri/views/MapView","esri/layers/FeatureLayer","esri/widgets/ScaleBar","esri/widgets/Legend","esri/widgets/Search","esri/widgets/LayerList","esri/widgets/BasemapGallery","esri/widgets/AreaMeasurement2D",
+        "esri/widgets/Expand"], (Map, MapView,FeatureLayer,ScaleBar,Legend,Search,LayerList,BasemapGallery,AreaMeasurement2D, Expand) => {
+       
+        const map = new Map({
+          basemap: "topo-vector"
+        });
+
+        const mapView = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 4,
+          center: [105, 35] // longitude, latitude
+        });
+
+
+      
+        const flayer = new FeatureLayer({
+            url: "https://www.geosceneonline.cn/server/rest/services/Hosted/全国各省妇幼保健院数/FeatureServer"
+        });
+        map.layers.add(flayer);
+
+      
+        let scaleBar = new ScaleBar({
+            view: mapView
+         });
+        mapView.ui.add(scaleBar, {
+            position: "bottom-left"  
+        });
+
+        let layerList = new LayerList({
+            view: mapView
+        });
+        mapView.ui.add(layerList, {
+            position: "top-right"   
+        });
+
+        
+        const searchWidget = new Search({
+            view: mapView
+        });
+        mapView.ui.add(searchWidget, {
+            position: "top-left",       
+            index: 0
+        });
+
+    
+      let legend = new Legend({
+            view: mapView
+        });
+        mapView.ui.add(legend, "top-right");
+        
+
+    
+        let basemapGallery = new BasemapGallery({
+        view: mapView,
+   
+        hasEventListener(click){
+        true
+        }
+        });
+
+        mapView.ui.add(basemapGallery, {
+        position: "top-right"    
+        });
+
+        const areaMeasurementWidget = new AreaMeasurement2D({
+          view: mapView,
+          unit: "square-kilometers"
+        });
+
+        
+        const expand = new Expand({
+          view: mapView,
+          content: areaMeasurementWidget,
+          expandIconClass: "esri-icon-measure-area",
+          group: "analysis"
+        });
+        mapView.ui.add(expand, {
+        position: "top-left",     
+        index: 1
+      });
+      
+     });
+    </script>
+  </head>
+
+  <body>
+    <header>
+      <h1>全国各省妇幼保健院数</h1><br/>
+  </header>
+    <div id="viewDiv"></div>
+   
+  </body>
+</html>
